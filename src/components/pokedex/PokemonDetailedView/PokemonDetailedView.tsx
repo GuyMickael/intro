@@ -8,21 +8,37 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Avatar,
+  Tooltip,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { IPokemonData } from "../../../types/pokedexApi.types";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useAppDispatch";
+import {
+  addCapturedPokemon,
+  removeCapturedPokemon,
+} from "../../../store/slices/pokemon-slice";
 
 export default function PokemonDetailedView() {
   const { pokeId } = useParams<{ pokeId: string }>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  // --- State local pour la vue ---
   const [pokemon, setPokemon] = useState<IPokemonData | null>(null);
   const [spriteMode, setSpriteMode] = useState<"normal" | "shiny">("normal");
   const [loading, setLoading] = useState(true);
-
   const [prevSprite, setPrevSprite] = useState<string | null>(null);
   const [nextSprite, setNextSprite] = useState<string | null>(null);
 
+  // --- Sélecteur Redux : ids capturés ---
+  const capturedIds = useAppSelector(
+    (state) => state.pokemon.capturedPokemonIds
+  );
+
+  const isCaptured = pokemon ? capturedIds.includes(pokemon.pokedex_id) : false;
+
+  // --- Effet principal : récupérer le Pokémon et les sprites voisins ---
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
@@ -65,6 +81,7 @@ export default function PokemonDetailedView() {
     fetchPreviewSprites();
   }, [pokeId]);
 
+  // --- Handlers ---
   const handleSpriteToggle = (
     _: React.MouseEvent<HTMLElement>,
     newMode: "normal" | "shiny" | null
@@ -74,11 +91,20 @@ export default function PokemonDetailedView() {
 
   const goTo = (offset: number) => {
     const id = Number(pokeId);
-    if (!isNaN(id)) {
-      navigate(`/pokemon/${id + offset}`);
+    if (!isNaN(id)) navigate(`/pokemon/${id + offset}`);
+  };
+
+  const handleCaptureToggle = () => {
+    if (pokemon) {
+      dispatch(
+        isCaptured
+          ? removeCapturedPokemon(pokemon.pokedex_id)
+          : addCapturedPokemon(pokemon.pokedex_id)
+      );
     }
   };
 
+  // --- UI : Loading ---
   if (loading || !pokemon || !pokemon.sprites) {
     return (
       <Box display="flex" justifyContent="center" mt={10}>
@@ -87,7 +113,6 @@ export default function PokemonDetailedView() {
     );
   }
 
-  console.log("Pokemon data:", pokemon);
   return (
     <Box
       sx={{
@@ -108,9 +133,32 @@ export default function PokemonDetailedView() {
         width={"50%"}
         bgcolor={"white"}
         borderRadius={3}
+        boxShadow={4}
       >
-        {/* IMAGE + TOGGLE */}
-        <Box display="flex" flexDirection="row" alignItems="center">
+        {/* IMAGE + TOGGLE + BADGE DE CAPTURE */}
+        <Box
+          position="relative"
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+        >
+          {/* Badge Pokéball pour statut capturé */}
+          {isCaptured && (
+            <Tooltip title="Pokémon capturé !">
+              <Avatar
+                src="/assets/pokeball.png" // place une petite icône de Pokéball dans /public/assets
+                sx={{
+                  position: "absolute",
+                  top: -10,
+                  left: -10,
+                  width: 32,
+                  height: 32,
+                  bgcolor: "#fff",
+                }}
+              />
+            </Tooltip>
+          )}
+
           <img
             src={
               spriteMode === "normal"
@@ -120,7 +168,7 @@ export default function PokemonDetailedView() {
             alt={pokemon.name.fr}
             style={{ width: "200px", height: "200px", objectFit: "contain" }}
           />
-          <Box>
+          <Box ml={2}>
             <ToggleButtonGroup
               value={spriteMode}
               exclusive
@@ -133,6 +181,30 @@ export default function PokemonDetailedView() {
             </ToggleButtonGroup>
           </Box>
         </Box>
+
+        {/* BOUTON CAPTURE / RELACHER */}
+        <Button
+          onClick={handleCaptureToggle}
+          variant={isCaptured ? "outlined" : "contained"}
+          color={isCaptured ? "warning" : "success"}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            fontWeight: "bold",
+            textTransform: "none",
+          }}
+        >
+          <Avatar
+            src={
+              isCaptured
+                ? "https://media.tenor.com/Qf0w-d4L0MAAAAAe/pikachu-sad-pikachu.png"
+                : "/pokeball.png"
+            }
+            sx={{ width: 24, height: 24 }}
+          />
+          {isCaptured ? "Relâcher" : "Capturer"}
+        </Button>
 
         {/* INFOS POKEMON */}
         <Card sx={{ minWidth: 300, maxWidth: 500, boxShadow: 6 }}>
@@ -149,7 +221,7 @@ export default function PokemonDetailedView() {
               #{pokemon.pokedex_id} {pokemon.category}
             </Typography>
             <Typography variant="subtitle1" mt={2}>
-              🧬 Types:{" "}
+              🧬 Types:
             </Typography>
             {pokemon.types?.map((t) => (
               <Box
@@ -201,26 +273,10 @@ export default function PokemonDetailedView() {
             <Button
               onClick={() => goTo(-1)}
               variant="outlined"
-              sx={{
-                borderRadius: "50%",
-                padding: 2,
-                minWidth: "auto",
-              }}
+              sx={{ borderRadius: "50%", p: 2, minWidth: "auto" }}
               disabled={pokemon.pokedex_id === 1}
             >
-              <Avatar
-                src={prevSprite}
-                sx={{
-                  width: 56,
-                  height: 56,
-                  mb: 1,
-                  transition: "transform 0.5s ease",
-                  "&:hover": {
-                    transform: "scale(1.4)",
-                  },
-                }}
-              />
-              ⬅
+              <Avatar src={prevSprite} sx={{ width: 56, height: 56, mb: 1 }} />⬅
             </Button>
           )}
 
@@ -228,25 +284,9 @@ export default function PokemonDetailedView() {
             <Button
               onClick={() => goTo(1)}
               variant="outlined"
-              sx={{
-                borderRadius: "50%",
-                padding: 2,
-                minWidth: "auto",
-              }}
+              sx={{ borderRadius: "50%", p: 2, minWidth: "auto" }}
             >
-              <Avatar
-                src={nextSprite}
-                sx={{
-                  width: 56,
-                  height: 56,
-                  mb: 1,
-                  transition: "transform 0.5s ease",
-                  "&:hover": {
-                    transform: "scale(1.4)",
-                  },
-                }}
-              />
-              ➡
+              <Avatar src={nextSprite} sx={{ width: 56, height: 56, mb: 1 }} />➡
             </Button>
           )}
         </Box>

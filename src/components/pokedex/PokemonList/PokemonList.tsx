@@ -8,17 +8,22 @@ import {
   CardMedia,
   CardContent,
   Fab,
+  Avatar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { IPokemonData } from "../../../types/pokedexApi.types";
+import { useAppSelector } from "../../../hooks/useAppDispatch";
 
 export function PokemonList() {
   const [pokemons, setPokemons] = useState<IPokemonData[]>([]);
   const [page, setPage] = useState(0);
   const itemsPerPage = 35;
   const navigate = useNavigate();
+  const pokemonCapturedIds = useAppSelector(
+    (state) => state.pokemon.capturedPokemonIds
+  );
 
   useEffect(() => {
     fetch("https://tyradex.app/api/v1/gen/1")
@@ -67,6 +72,20 @@ export function PokemonList() {
                   }}
                 />
                 <CardContent sx={{ textAlign: "center", p: 1 }}>
+                  {pokemonCapturedIds.includes(poke.pokedex_id) && (
+                    <Avatar
+                      src="/pokeball.png"
+                      alt="Pokéball"
+                      sx={{
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                        width: 24,
+                        height: 24,
+                        backgroundColor: "white",
+                      }}
+                    />
+                  )}
                   <Typography variant="body2" fontWeight="bold">
                     {poke.name.fr}
                   </Typography>
