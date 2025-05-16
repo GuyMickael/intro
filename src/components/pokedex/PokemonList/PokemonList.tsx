@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -8,27 +8,22 @@ import {
   CardMedia,
   CardContent,
   Fab,
+  Avatar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { IPokemonData } from "../../../types/pokedexApi.types";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { useGetGenQuery } from "../../../api/pokemonApi";
 
 export function PokemonList() {
-  const [pokemons, setPokemons] = useState<IPokemonData[]>([]);
   const [page, setPage] = useState(0);
   const itemsPerPage = 35;
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetch("https://tyradex.app/api/v1/gen/1")
-      .then((res) => res.json())
-      .then((data) => setPokemons(data))
-      .catch((error) =>
-        console.error("Erreur lors de la récupération des données", error)
-      );
-  }, []);
-
+  const pokemonCapturedIds = useAppSelector(
+    (state) => state.pokemon.capturedPokemonIds
+  );
+  const { data: pokemons = [], isLoading, isError } = useGetGenQuery(1);
   const startIndex = page * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentPokemons = pokemons.slice(startIndex, endIndex);
@@ -40,6 +35,13 @@ export function PokemonList() {
   const handleNext = () => {
     if (endIndex < pokemons.length) setPage(page + 1);
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  if (isError) {
+    return <p>Erreur de chargement des Pokémon, l'api est down</p>;
+  }
 
   return (
     <Box p={2} position="relative">
@@ -67,6 +69,20 @@ export function PokemonList() {
                   }}
                 />
                 <CardContent sx={{ textAlign: "center", p: 1 }}>
+                  {pokemonCapturedIds.includes(poke.pokedex_id) && (
+                    <Avatar
+                      src="/pokeball.png"
+                      alt="Pokéball"
+                      sx={{
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                        width: 24,
+                        height: 24,
+                        backgroundColor: "white",
+                      }}
+                    />
+                  )}
                   <Typography variant="body2" fontWeight="bold">
                     {poke.name.fr}
                   </Typography>

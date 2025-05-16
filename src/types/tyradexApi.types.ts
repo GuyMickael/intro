@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface PokemonTypeName {
   fr: string;
   en: string;

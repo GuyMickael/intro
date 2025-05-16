@@ -3,6 +3,7 @@ import PokemonDetailedView from "../components/pokedex/PokemonDetailedView/Pokem
 import NotFound from "../components/404/NotFound";
 import RootLayout from "./RootLayout";
 import { PokemonList } from "../components/pokedex/PokemonList/PokemonList";
+import LoginForm from "../components/LoginForm/LoginForm";
 
 const myRoutes: RouteObject[] = [
   {
@@ -20,6 +21,10 @@ const myRoutes: RouteObject[] = [
       {
         path: "*",
         element: <NotFound />,
+      },
+      {
+        path: "/login",
+        element: <LoginForm />,
       },
     ],
   },
