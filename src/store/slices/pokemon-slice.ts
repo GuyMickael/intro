@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface PokemonCapturedState {
   capturedPokemonIds: number[];
+  trainerIds: number[];
 }
 
 const initialState: PokemonCapturedState = {
   capturedPokemonIds: [],
+  trainerIds: [],
 };
 
 const pokemonSlice = createSlice({
