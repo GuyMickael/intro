@@ -15,6 +15,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { useGetGenQuery } from "../../../api/pokemonApi";
+import Header from "../../Header/Header";
 
 export function PokemonList() {
   const [page, setPage] = useState(0);
@@ -45,6 +46,7 @@ export function PokemonList() {
 
   return (
     <Box p={2} position="relative">
+      <Header />
       <Grid container spacing={2}>
         {currentPokemons.map((poke) => (
           <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2.4 }}>

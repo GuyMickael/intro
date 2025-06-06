@@ -21,7 +21,6 @@ import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 
 export default function PokemonDetailedView() {
-  
   /* -------------------- routing + RTK Query -------------------- */
   const { pokeId } = useParams<{ pokeId: string }>();
   const id = Number(pokeId);
@@ -211,7 +210,7 @@ export default function PokemonDetailedView() {
               ⬅
             </Button>
           )}
-
+          <a href="/">test </a>
           {next?.sprites.regular && (
             <Button
               variant="outlined"

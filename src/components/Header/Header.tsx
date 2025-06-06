@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -10,7 +11,14 @@ const Header = () => {
       top={0}
       zIndex={999}
     >
-      <img src="/pokedexImage.png" width="150px" />
+      <Link to="/flow">
+        {" "}
+        <img
+          src="/pokedexImage.png"
+          width="150px"
+          data-testid="pokeball-test-img"
+        />
+      </Link>
     </Box>
   );
 };
