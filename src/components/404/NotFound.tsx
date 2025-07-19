@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import Header from "../Header/Header";
 
 export default function NotFound() {
   return (
@@ -15,21 +16,10 @@ export default function NotFound() {
         position: "relative",
         overflow: "hidden",
         textAlign: "center",
+        pt: 2,
       }}
     >
-      <Box
-        component="img"
-        src="/pokeball.png"
-        alt="pokeball"
-        sx={{
-          position: "absolute",
-          top: 40,
-          right: 40,
-          width: 64,
-          height: 64,
-          animation: "bounce 1s infinite alternate",
-        }}
-      />
+      <Header />
       <Box
         component="img"
         src="/pikachu.png"
@@ -51,9 +41,14 @@ export default function NotFound() {
         4
         <Box
           component="img"
-          src="/pokeball-404.webp"
+          src="/pokeball.png"
           alt="pokeball"
-          sx={{ width: 48, height: 48, mx: 1 }}
+          sx={{
+            paddingTop: 2,
+            width: 64,
+            height: 64,
+            animation: "bounce 1s infinite alternate",
+          }}
         />
         4
       </Typography>
@@ -62,7 +57,7 @@ export default function NotFound() {
         <Typography component="span" color="error" fontWeight="bold">
           SORRY
         </Typography>{" "}
-        – Pokémon not found
+        – Page not found
       </Typography>
 
       <Link to="/" style={{ textDecoration: "none" }}>

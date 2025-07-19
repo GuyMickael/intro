@@ -6,7 +6,7 @@ interface JwtPayload {
   username: string;
   role: string;
   iat: number;
-  exp: number; // timestamp UNIX en secondes
+  exp: number;
 }
 
 export const profileApi = createApi({

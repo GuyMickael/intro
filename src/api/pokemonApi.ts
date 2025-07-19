@@ -8,8 +8,12 @@ export const pokemonApi = createApi({
 
   endpoints: (builder) => ({
     getGen: builder.query<IPokemonData[], number | void>({
-      query: (gen = 1) => `gen/${gen}`,
+      query: (gen = 2) => `gen/${gen}`,
       providesTags: () => ["PokemonGen"], // Tag pour la mise à jour de la liste
+    }),
+
+    getAllPokemons: builder.query<IPokemonData[], void>({
+      query: () => `pokemon`,
     }),
 
     getPokemon: builder.query<IPokemonData, number>({
@@ -27,5 +31,9 @@ export const pokemonApi = createApi({
   }),
 });
 
-export const { useGetGenQuery, useGetPokemonQuery, useFakeApiPostMutation } =
-  pokemonApi;
+export const {
+  useGetGenQuery,
+  useGetAllPokemonsQuery,
+  useGetPokemonQuery,
+  useFakeApiPostMutation,
+} = pokemonApi;

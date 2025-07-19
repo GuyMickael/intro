@@ -3,6 +3,7 @@ import PokemonDetailedView from "../components/pokedex/PokemonDetailedView/Pokem
 import NotFound from "../components/404/NotFound";
 import RootLayout from "./RootLayout";
 import { PokemonList } from "../components/pokedex/PokemonList/PokemonList";
+import { GenerationSelector } from "../components/pokedex/GenerationSelector/GenerationSelector";
 import LoginForm from "../components/LoginForm/LoginForm";
 import { FlowTester } from "../components/TestFlow";
 
@@ -13,6 +14,18 @@ const myRoutes: RouteObject[] = [
     children: [
       {
         index: true,
+        element: <GenerationSelector />,
+      },
+      {
+        path: "generations",
+        element: <GenerationSelector />,
+      },
+      {
+        path: "generation/:generationId",
+        element: <PokemonList />,
+      },
+      {
+        path: "pokemons",
         element: <PokemonList />,
       },
       {
