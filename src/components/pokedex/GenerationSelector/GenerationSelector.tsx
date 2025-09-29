@@ -25,8 +25,7 @@ const generations: Generation[] = [
     id: 1,
     name: "Génération I",
     region: "Kanto",
-    image:
-      "https://archives.bulbagarden.net/media/upload/thumb/7/7d/PE_Kanto_Map.png/800px-PE_Kanto_Map.png",
+    image: "/Carte_Kanto.png",
     description: "La région de Kanto, berceau des Pokémon",
     pokemonCount: 151,
   },

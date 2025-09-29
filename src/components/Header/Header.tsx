@@ -19,7 +19,6 @@ import {
   Home as HomeIcon,
   List as ListIcon,
   Person as PersonIcon,
-  Settings as SettingsIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
 import { useState } from "react";
