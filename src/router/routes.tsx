@@ -1,9 +1,9 @@
 import { RouteObject } from "react-router-dom";
-import PokemonDetailedView from "../components/pokedex/PokemonDetailedView/PokemonDetailedView";
+import PokemonDetailedView from "../components/Pokedex/PokemonDetailedView/PokemonDetailedView";
 import NotFound from "../components/404/NotFound";
 import RootLayout from "./RootLayout";
-import { PokemonList } from "../components/pokedex/PokemonList/PokemonList";
-import { GenerationSelector } from "../components/pokedex/GenerationSelector/GenerationSelector";
+import { PokemonList } from "../components/Pokedex/PokemonList/PokemonList";
+import { GenerationSelector } from "../components/Pokedex/GenerationSelector/GenerationSelector";
 import LoginForm from "../components/LoginForm/LoginForm";
 import { FlowTester } from "../components/TestFlow";
 
