@@ -35,7 +35,7 @@ function LoginForm() {
       console.log("Refresh Token:", refreshToken);
 
       // Rediriger vers la page protégée (exemple : "/profile" ou "/dashboard")
-      navigate("/profile");
+      navigate("/");
     } catch (err) {
       // L’erreur est déjà gérée par isError + error dans le JSX,
       // mais on peut logger en console pour voir le message exact :
